@@ -1,46 +1,59 @@
-var $ = require("jquery");
-require("fabric");
-var fabric = window['fabric'];
+"use strict";
 
+var mic, fft;
+var eqB, eqM, eqT;
 
-var main = function() {
-  $('#example').text('hi');
+function setup() {
+   createCanvas(710, 400);
+   noFill();
 
-  var canvas = new fabric.Canvas('canvas', {
-    backgroundColor: 'rgb(200,200,200)',
-  });
+   mic = new p5.AudioIn();
+   mic.start();
+   fft = new p5.FFT();
+   fft.setInput(mic);
 
-  var f1 = new fabric.Rect({
-      top: 100,
-      left: 100,
-      width: 60,
-      height: 600,
-      fill: 'rgb(200,50,50)',
-      selectable: false
-  });
-
-  var f2 = new fabric.Rect({
-      top: 100,
-      left: 200,
-      width: 60,
-      height: 600,
-      fill: 'rgb(200,50,50)',
-      selectable: false
-  });
-
-  var f3 = new fabric.Rect({
-      top: 100,
-      left: 300,
-      width: 60,
-      height: 600,
-      fill: 'rgb(200,50,50)',
-      selectable: false
-  });
-
-  canvas.add(f1);
-  canvas.add(f2);
-  canvas.add(f3);
-
+   eqB = new EQ(1);
+   eqM = new EQ(2);
+   eqT = new EQ(3);
 }
 
-$(main);
+function draw() {
+   background(0);
+   stroke(0,255,0);
+   const spectrum = fft.analyze();
+
+   // get the energy
+   let eBass = fft.getEnergy('bass');
+   let eMid = fft.getEnergy('mid');
+   let eTreble = fft.getEnergy('treble');
+
+   noStroke();
+   fill(255,255,255);  // text is white
+   textSize(20);
+   text("bass: " + round(eBass), 10, 40);
+   text("mid: " + round(eMid), 10, 80);
+   text("treble: " + round(eTreble), 10, 120);
+
+   eqB.move(eBass);
+   eqM.move(eMid);
+   eqT.move(eTreble);
+   eqB.display();
+   eqM.display();
+   eqT.display();
+}
+
+function EQ(index) {
+  this.x = width / 4 * index;
+  this.y = random(height);
+  this.diameter = 30;
+
+  this.move = function(arg) {
+    const relY = height / 256 * arg;
+    this.y = height - relY - (this.diameter / 2);
+  };
+
+  this.display = function() {
+    fill(255, 0, 0);
+    ellipse(this.x, this.y, this.diameter, this.diameter);
+  }
+};
