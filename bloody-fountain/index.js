@@ -37,9 +37,9 @@ function draw() {
    eqB.move(eBass);
    eqM.move(eMid);
    eqT.move(eTreble);
-   eqB.display();
-   eqM.display();
-   eqT.display();
+   eqB.display(eBass, eMid, eTreble);
+   eqM.display(eBass, eMid, eTreble);
+   eqT.display(eBass, eMid, eTreble);
 }
 
 function EQ(index) {
@@ -52,8 +52,8 @@ function EQ(index) {
     this.y = height - relY - (this.diameter / 2);
   };
 
-  this.display = function() {
-    fill(255, 0, 0);
+  this.display = function(r, g, b) {
+    fill(255 - r, 255 - g, 255 - b);
     ellipse(this.x, this.y, this.diameter, this.diameter);
   }
 };
