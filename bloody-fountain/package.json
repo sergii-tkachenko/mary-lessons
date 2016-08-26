@@ -1,0 +1,25 @@
+{
+  "name": "bloody-fountain",
+  "version": "1.0.0",
+  "description": "Mary's lesson 1",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "watchify index.js -d -o bundle.js -v"
+  },
+  "author": "Sergii Tkachenko",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sergii-tkachenko/mary-lessons.git"
+  },
+  "dependencies": {
+    "browserify": "^13.1.0",
+    "fabric": "^1.6.3",
+    "jquery": "^3.1.0"
+  },
+  "devDependencies": {
+    "babelify": "^7.3.0",
+    "watchify": "^3.7.0"
+  }
+}
